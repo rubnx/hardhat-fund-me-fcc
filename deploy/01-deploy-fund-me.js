@@ -4,9 +4,13 @@
 
 // When we run hardhat deploy, hardhat deploy is going to call a function that we specify in this script
 
+const { networkConfig, developmentChains } = require("../helper-hardhat-config")
+const { network } = require("hardhat")
+const { verify } = require("../utils/verify")
+
 // We are going to export this deployFunc() as the default function for hardhat deploy to look for
 
-// ##### SINTAX BELOW NAMING THE FUNCTION ###
+// ##### SINTAX BELOW NAMING THE FUNCTION #####
 // function deployFunc() {
 //     console.log("Hi!")
 // }
@@ -16,10 +20,6 @@
 // module.exports = async (hre) => {
 //     const { getNamedAccounts, deployments } = hre}
 
-const { networkConfig, developmentChains } = require("../helper-hardhat-config")
-const { network } = require("hardhat")
-const { verify } = require("../utils/verify")
-
 // ##### VERSION WITH JAVASCRIPT SYNTACTIC SUGAR BELOW #####
 module.exports = async ({ getNamedAccounts, deployments }) => {
     const { deploy, log } = deployments
@@ -28,7 +28,7 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
     // if chainId is X use address Y
     // if chainId is Z use address A
 
-    // const ethUsdPriceFeedAdress = networkConfig[chainId]["ethUsdPriceFeed"]
+    // s_priceFeedAddress is the argument needed for the constructor
     let ethUsdPriceFeedAddress
     if (developmentChains.includes(network.name)) {
         const ethUsdAggregator = await deployments.get("MockV3Aggregator")

@@ -84,12 +84,15 @@ contract FundMe {
             s_addressToAmountFunded[funder] = 0;
         }
         s_funders = new address[](0);
-        // // transfer
+        // Different methods to transfer assets
+        // // 1. transfer
         // payable(msg.sender).transfer(address(this).balance);
-        // // send
+        // // 2. send
         // bool sendSuccess = payable(msg.sender).send(address(this).balance);
         // require(sendSuccess, "Send failed");
-        // call
+        // // 3. call
+        // call is the most flexible of the 3 methods as it allows to specify the
+        // amount of gas to be used and the data to be sent along with the tx
         (bool callSuccess, ) = payable(msg.sender).call{
             value: address(this).balance
         }("");

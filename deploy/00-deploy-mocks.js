@@ -10,6 +10,7 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
     const { deployer } = await getNamedAccounts()
     // const chainId = network.config.chainId
 
+    // _decimals and _initialAnswer are the arguments needed for the constructor
     if (developmentChains.includes(network.name)) {
         log("Local network detected! Deploying mocks...")
         await deploy("MockV3Aggregator", {

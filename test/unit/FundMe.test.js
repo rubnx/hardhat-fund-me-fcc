@@ -2,9 +2,13 @@ const { deployments, ethers, getNamedAccounts } = require("hardhat")
 const { assert, expect } = require("chai")
 const { developmentChains } = require("../../helper-hardhat-config")
 
+// Tests for development Networks (Localhost, Hardhat...)
+// We will check whether the current network is a development chain,
+// and if it is not, it skips the block of tests.
 !developmentChains.includes(network.name)
-    ? describe.skip
+    ? describe.skip // if the previous line is true, we skip the test
     : describe("FundMe", async function () {
+          // else (if it's false) we do the test
           let fundMe
           let deployer
           let mockV3Aggregator
@@ -28,7 +32,6 @@ const { developmentChains } = require("../../helper-hardhat-config")
                   assert.equal(response, mockV3Aggregator.address)
               })
           })
-
           describe("fund", async function () {
               it("Fails if you don't send enough ETH", async function () {
                   await expect(fundMe.fund()).to.be.revertedWith(
@@ -54,7 +57,7 @@ const { developmentChains } = require("../../helper-hardhat-config")
                   await fundMe.fund({ value: sendValue })
               })
 
-              it("Withdraw ETH from a single founder", async function () {
+              it("Withdraw ETH from a single funder", async function () {
                   // Arrange
                   const startingFundMeBalance =
                       await fundMe.provider.getBalance(fundMe.address)
@@ -100,7 +103,6 @@ const { developmentChains } = require("../../helper-hardhat-config")
                   const { gasUsed, effectiveGasPrice } = transactionReceipt
                   const gasCost = gasUsed.mul(effectiveGasPrice)
 
-                  // Assert
                   const endingFundMeBalance = await fundMe.provider.getBalance(
                       fundMe.address
                   )
@@ -117,8 +119,10 @@ const { developmentChains } = require("../../helper-hardhat-config")
                   )
 
                   // Make sure that the getFunder are reset properly
+                  // s_funders = new address[](0); this line should create an empty array
                   await expect(fundMe.getFunder(0)).to.be.reverted
-
+                  // mapping(address => uint256) private s_addressToAmountFunded;
+                  // should show all addresses with 0 balance
                   for (i = 1; i < 6; i++) {
                       assert.equal(
                           await fundMe.getAddressToAmountFunded(
@@ -177,7 +181,8 @@ const { developmentChains } = require("../../helper-hardhat-config")
 
                   // Make sure that the getFunder are reset properly
                   await expect(fundMe.getFunder(0)).to.be.reverted
-
+                  // mapping(address => uint256) private s_addressToAmountFunded;
+                  // should show all addresses with 0 balance
                   for (i = 1; i < 6; i++) {
                       assert.equal(
                           await fundMe.getAddressToAmountFunded(

@@ -2,6 +2,9 @@ const { ethers, getNamedAccounts, network } = require("hardhat")
 const { developmentChains } = require("../../helper-hardhat-config")
 const { assert, expect } = require("chai")
 
+// Tests form live networks (Ethereum, Sepolia, Matic...)
+// We check if the current chain is a development chain
+// and if it is, it skips these tests
 developmentChains.includes(network.name)
     ? describe.skip
     : describe("FundMe", async function () {
